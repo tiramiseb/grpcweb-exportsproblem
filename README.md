@@ -12,7 +12,7 @@ yarn install
 yarn serve
 ```
 
-Then login to http://localhost:8080 and check the console.
+Then connect to http://localhost:8080 and check the console.
 
 ### Result
 
