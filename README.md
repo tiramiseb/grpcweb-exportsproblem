@@ -59,4 +59,5 @@ vue create webapp
 cd webapp
 yarn add google-protobuf @types/google-protobuf grpc-web-client
 yarn add -D ts-protoc-gen
+protoc -I../rpc service.proto --plugin="protoc-gen-ts=node_modules/.bin/protoc-gen-ts" --js_out=import_style=commonjs:src --ts_out=service=true:src
 ```
