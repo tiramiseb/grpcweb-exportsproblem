@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package service;
+
+service Foo {
+    rpc Bar(In) returns (Out) {}
+}
+
+message In {
+    string in = 1;
+}
+
+message Out {
+    string out = 1;
+}
