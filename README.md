@@ -1,54 +1,32 @@
-# Test repo for a problem with ts-protoc-gen for gRPC-Web @improbable-eng
+# Test repo for another problem with ts-protoc-gen for gRPC-Web @improbable-eng
 
-See https://github.com/improbable-eng/ts-protoc-gen/issues/103
+See https://github.com/improbable-eng/ts-protoc-gen/issues/111
 
 ## How to test
 
-First, install yarn, then:
+Serve the `webapp/dist/` directory with any web server and try with any web browser.
 
-```
-cd webapp
-yarn install
-yarn serve
-```
-
-Then login to http://localhost:8080 and check the console.
+(tested with NginX + Chromium)
 
 ### Result
 
-You see the following error in the console:
+You see the following error in the console (example with Chromium):
 
 ```
-service_pb_service.js?8599:22 Uncaught ReferenceError: exports is not defined
-    at eval (service_pb_service.js?8599:22)
-    at Module../src/service_pb_service.js (app.js:2568)
-    at __webpack_require__ (app.js:725)
-    at fn (app.js:102)
-    at eval (cjs.js?!./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js?!./src/App.vue?vue&type=script&lang=js&:8)
-    at Module../node_modules/cache-loader/dist/cjs.js?!./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js?!./src/App.vue?vue&type=script&lang=js& (app.js:911)
-    at __webpack_require__ (app.js:725)
-    at fn (app.js:102)
-    at eval (App.vue?c53a:1)
-    at Module../src/App.vue?vue&type=script&lang=js& (app.js:2521)
+service_pb.js:300 Uncaught ReferenceError: exports is not defined
+    at Module.29fd (service_pb.js:300)
+    at s (bootstrap:78)
+    at Object.8599 (service_pb_service.js:4)
+    at s (bootstrap:78)
+    at Module.56d7 (App.vue?685f:2)
+    at s (bootstrap:78)
+    at Object.0 (bootstrap:151)
+    at s (bootstrap:78)
+    at r (bootstrap:45)
+    at 0 (bootstrap:151)
 ```
 
-### One step forward (maybe)
-
-Uncomment the following line at the top of the `webapp/src/service_pb_service.js` file:
-
-```
-var exports = (typeof module === 'object' && module != null && module.exports !== undefined) ? module.exports : {};
-```
-
-(you don't need to reload anything, it is reloaded automatically)
-
-Then, you see that Foo and FooClient are not defined, in the console:
-
-```
-Foo and FooClient:
-undefined
-undefined
-```
+Please note this behaviour is not encountered when serving files with `yarn serve`.
 
 ## Initialized with
 
@@ -59,5 +37,9 @@ vue create webapp
 cd webapp
 yarn add google-protobuf @types/google-protobuf grpc-web-client
 yarn add -D ts-protoc-gen
+# Change ts-protoc-gen version to 0.7.7-pre.687bcc7 in package.json
+yarn install
 protoc -I../rpc service.proto --plugin="protoc-gen-ts=node_modules/.bin/protoc-gen-ts" --js_out=import_style=commonjs:src --ts_out=service=true:src
+yarn build
 ```
+
